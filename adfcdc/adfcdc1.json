@@ -1,0 +1,355 @@
+{
+	"name": "adfcdc1",
+	"properties": {
+		"SourceConnectionsInfo": [
+			{
+				"SourceEntities": [
+					{
+						"name": "dbo.ORDERS_SOURCE",
+						"properties": {
+							"schema": [
+								{
+									"name": "ORDER_ID",
+									"dataType": "integer"
+								},
+								{
+									"name": "PRODUCT",
+									"dataType": "string"
+								},
+								{
+									"name": "QUANTITY",
+									"dataType": "integer"
+								},
+								{
+									"name": "UNIT_PRICE",
+									"dataType": "decimal(11,2)"
+								},
+								{
+									"name": "ORDER_DATE",
+									"dataType": "timestamp"
+								},
+								{
+									"name": "IS_DELETED",
+									"dataType": "string"
+								},
+								{
+									"name": "CREATION_DATE",
+									"dataType": "timestamp"
+								},
+								{
+									"name": "UPDATE_DATE",
+									"dataType": "timestamp"
+								}
+							],
+							"dslConnectorProperties": [
+								{
+									"name": "format",
+									"value": "table"
+								},
+								{
+									"name": "store",
+									"value": "sqlserver"
+								},
+								{
+									"name": "schemaName",
+									"value": "dbo"
+								},
+								{
+									"name": "tableName",
+									"value": "ORDERS_SOURCE"
+								},
+								{
+									"name": "databaseType",
+									"value": "databaseType"
+								},
+								{
+									"name": "database",
+									"value": "database"
+								},
+								{
+									"name": "enableCdc",
+									"value": true
+								},
+								{
+									"name": "skipInitialLoad",
+									"value": true
+								},
+								{
+									"name": "waterMarkColumn",
+									"value": "CREATION_DATE"
+								},
+								{
+									"name": "allowSchemaDrift",
+									"value": false
+								},
+								{
+									"name": "inferDriftedColumnTypes",
+									"value": false
+								}
+							]
+						}
+					}
+				],
+				"Connection": {
+					"linkedService": {
+						"referenceName": "LinkedServiceHomeDB",
+						"type": "LinkedServiceReference"
+					},
+					"linkedServiceType": "AzureSqlDatabase",
+					"type": "linkedservicetype",
+					"isInlineDataset": true
+				}
+			}
+		],
+		"TargetConnectionsInfo": [
+			{
+				"TargetEntities": [
+					{
+						"name": "DBO.TARGET_ORDERS_CDC",
+						"properties": {
+							"schema": [
+								{
+									"name": "ORDER_ID",
+									"dataType": "integer"
+								},
+								{
+									"name": "PRODUCT",
+									"dataType": "string"
+								},
+								{
+									"name": "QUANTITY",
+									"dataType": "integer"
+								},
+								{
+									"name": "UNIT_PRICE",
+									"dataType": "decimal(11,2)"
+								},
+								{
+									"name": "ORDER_DATE",
+									"dataType": "timestamp"
+								},
+								{
+									"name": "IS_DELETED",
+									"dataType": "string"
+								},
+								{
+									"name": "CREATION_DATE",
+									"dataType": "timestamp"
+								},
+								{
+									"name": "UPDATE_DATE",
+									"dataType": "timestamp"
+								}
+							],
+							"dslConnectorProperties": [
+								{
+									"name": "format",
+									"value": "table"
+								},
+								{
+									"name": "store",
+									"value": "sqlserver"
+								},
+								{
+									"name": "schemaName",
+									"value": "DBO"
+								},
+								{
+									"name": "tableName",
+									"value": "TARGET_ORDERS_CDC"
+								},
+								{
+									"name": "databaseType",
+									"value": "databaseType"
+								},
+								{
+									"name": "database",
+									"value": "database"
+								},
+								{
+									"name": "deletable",
+									"value": true
+								},
+								{
+									"name": "insertable",
+									"value": true
+								},
+								{
+									"name": "updateable",
+									"value": true
+								},
+								{
+									"name": "upsertable",
+									"value": true
+								},
+								{
+									"name": "skipDuplicateMapInputs",
+									"value": true
+								},
+								{
+									"name": "skipDuplicateMapOutputs",
+									"value": true
+								},
+								{
+									"name": "keys",
+									"value": [
+										"ORDER_ID"
+									]
+								},
+								{
+									"name": "defaultToUpsert",
+									"value": true
+								},
+								{
+									"name": "allowSchemaDrift",
+									"value": false
+								},
+								{
+									"name": "inferDriftedColumnTypes",
+									"value": false
+								}
+							]
+						}
+					}
+				],
+				"Connection": {
+					"linkedService": {
+						"referenceName": "LinkedServiceHomeDB",
+						"type": "LinkedServiceReference"
+					},
+					"linkedServiceType": "AzureSqlDatabase",
+					"type": "linkedservicetype",
+					"isInlineDataset": true
+				},
+				"DataMapperMappings": [
+					{
+						"targetEntityName": "DBO.TARGET_ORDERS_CDC",
+						"sourceEntityName": "dbo.ORDERS_SOURCE",
+						"sourceConnectionReference": {
+							"connectionName": "LinkedServiceHomeDB",
+							"type": "linkedservicetype"
+						},
+						"attributeMappingInfo": {
+							"attributeMappings": [
+								{
+									"name": "CREATION_DATE",
+									"type": "Direct",
+									"functionName": "",
+									"attributeReference": {
+										"name": "CREATION_DATE",
+										"entity": "dbo.ORDERS_SOURCE",
+										"entityConnectionReference": {
+											"connectionName": "LinkedServiceHomeDB",
+											"type": "linkedservicetype"
+										}
+									}
+								},
+								{
+									"name": "IS_DELETED",
+									"type": "Direct",
+									"functionName": "",
+									"attributeReference": {
+										"name": "IS_DELETED",
+										"entity": "dbo.ORDERS_SOURCE",
+										"entityConnectionReference": {
+											"connectionName": "LinkedServiceHomeDB",
+											"type": "linkedservicetype"
+										}
+									}
+								},
+								{
+									"name": "ORDER_DATE",
+									"type": "Direct",
+									"functionName": "",
+									"attributeReference": {
+										"name": "ORDER_DATE",
+										"entity": "dbo.ORDERS_SOURCE",
+										"entityConnectionReference": {
+											"connectionName": "LinkedServiceHomeDB",
+											"type": "linkedservicetype"
+										}
+									}
+								},
+								{
+									"name": "ORDER_ID",
+									"type": "Direct",
+									"functionName": "",
+									"attributeReference": {
+										"name": "ORDER_ID",
+										"entity": "dbo.ORDERS_SOURCE",
+										"entityConnectionReference": {
+											"connectionName": "LinkedServiceHomeDB",
+											"type": "linkedservicetype"
+										}
+									}
+								},
+								{
+									"name": "PRODUCT",
+									"type": "Direct",
+									"functionName": "",
+									"attributeReference": {
+										"name": "PRODUCT",
+										"entity": "dbo.ORDERS_SOURCE",
+										"entityConnectionReference": {
+											"connectionName": "LinkedServiceHomeDB",
+											"type": "linkedservicetype"
+										}
+									}
+								},
+								{
+									"name": "QUANTITY",
+									"type": "Direct",
+									"functionName": "",
+									"attributeReference": {
+										"name": "QUANTITY",
+										"entity": "dbo.ORDERS_SOURCE",
+										"entityConnectionReference": {
+											"connectionName": "LinkedServiceHomeDB",
+											"type": "linkedservicetype"
+										}
+									}
+								},
+								{
+									"name": "UNIT_PRICE",
+									"type": "Direct",
+									"functionName": "",
+									"attributeReference": {
+										"name": "UNIT_PRICE",
+										"entity": "dbo.ORDERS_SOURCE",
+										"entityConnectionReference": {
+											"connectionName": "LinkedServiceHomeDB",
+											"type": "linkedservicetype"
+										}
+									}
+								},
+								{
+									"name": "UPDATE_DATE",
+									"type": "Direct",
+									"functionName": "",
+									"attributeReference": {
+										"name": "UPDATE_DATE",
+										"entity": "dbo.ORDERS_SOURCE",
+										"entityConnectionReference": {
+											"connectionName": "LinkedServiceHomeDB",
+											"type": "linkedservicetype"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"Relationships": []
+			}
+		],
+		"Policy": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 15
+			},
+			"mode": "Microbatch"
+		},
+		"status": "Stopped",
+		"id": "ffc4181375064f0fbc6fe7b7e1196522"
+	}
+}

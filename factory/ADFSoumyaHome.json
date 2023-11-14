@@ -1,0 +1,9 @@
+{
+	"name": "ADFSoumyaHome",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "82d9278b-e787-4248-916a-f2df2c9242cc",
+		"tenantId": "c191f74f-b3e9-470e-9ad1-7be64b0f62cd"
+	}
+}

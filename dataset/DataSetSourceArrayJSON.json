@@ -1,0 +1,72 @@
+{
+	"name": "DataSetSourceArrayJSON",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedService_ADSL2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Employee_Array1.json",
+				"fileSystem": "source"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"Employees": {
+					"type": "object",
+					"properties": {
+						"Employee": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"EmployeeID": {
+										"type": "string"
+									},
+									"Name": {
+										"type": "string"
+									},
+									"Department": {
+										"type": "string"
+									},
+									"Designation": {
+										"type": "string"
+									},
+									"Project": {
+										"type": "string"
+									},
+									"DOJ": {
+										"type": "string"
+									},
+									"Education": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"Standard": {
+													"type": "string"
+												},
+												"Board": {
+													"type": "string"
+												},
+												"Institution": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

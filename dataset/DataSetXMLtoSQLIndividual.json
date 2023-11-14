@@ -1,0 +1,221 @@
+{
+	"name": "DataSetXMLtoSQLIndividual",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedServiceHomeDB",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "XML to Table - Data Sets"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "PROPERTY_1",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_2",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_3",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_4",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_5",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_6",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_7",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_8",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_9",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_10",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_11",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_12",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_13",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_14",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_15",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_16",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_17",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_18",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_19",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_20",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_21",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_22",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_23",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_24",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_25",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_26",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_27",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_28",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_29",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_30",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_31",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_32",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_33",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_34",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_35",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_36",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_37",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_38",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_39",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_40",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_41",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_42",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_43",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_44",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_45",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_46",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_47",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_48",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_49",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_50",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "XML_TO_TABLE_INDIVIDUAL"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

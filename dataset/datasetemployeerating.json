@@ -1,0 +1,59 @@
+{
+	"name": "datasetemployeerating",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedServiceHomeDB",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"RATING_YEAR": {
+				"type": "string",
+				"defaultValue": "2021-22"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "RATING_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "EMPLOYEE_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RATING_YEAR",
+				"type": "varchar"
+			},
+			{
+				"name": "RATING",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IS_ACTIVE",
+				"type": "varchar"
+			},
+			{
+				"name": "CREATION_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "MODIFICATION_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "EMPLOYEE_RATING"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

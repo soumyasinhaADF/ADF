@@ -1,0 +1,58 @@
+{
+	"name": "DataSetEmployee",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedServiceHomeDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EMPLOYEE_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "EMPLOYEE_NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "DOJ",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "DEPARTMENT",
+				"type": "varchar"
+			},
+			{
+				"name": "SUPERVISOR_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IS_ACTIVE",
+				"type": "varchar"
+			},
+			{
+				"name": "CREATION_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "MODIFICATION_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "EMPLOYEE"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

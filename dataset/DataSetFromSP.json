@@ -1,0 +1,13 @@
+{
+	"name": "DataSetFromSP",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedServiceHomeDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,215 @@
+{
+	"name": "SqlServerTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SelfHosted_SQLServerLinedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "LEAD_NO",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "LEAD_REF",
+				"type": "varchar"
+			},
+			{
+				"name": "BELL_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "LEAD_TIME",
+				"type": "varchar"
+			},
+			{
+				"name": "LEAD_BRANCH_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "LEAD_TYPE",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "LEAD_SUBTYPE",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "SCA_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "ACA_STCA_CODE",
+				"type": "varchar"
+			},
+			{
+				"name": "ACA_STCA_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "CANV_CODE",
+				"type": "varchar"
+			},
+			{
+				"name": "CANV_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "REPRESENT_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "ACA_STCA_2ND_CODE",
+				"type": "varchar"
+			},
+			{
+				"name": "ACA_STCA_2ND_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "CANV_2ND_CODE",
+				"type": "varchar"
+			},
+			{
+				"name": "CANV_2ND_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "REPRESENT_2ND_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "BELL_TIME",
+				"type": "varchar"
+			},
+			{
+				"name": "RESULT",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "APP_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "CANV_BELLED",
+				"type": "char"
+			},
+			{
+				"name": "CANV_BIZZED",
+				"type": "char"
+			},
+			{
+				"name": "CANV_BELLED1",
+				"type": "char"
+			},
+			{
+				"name": "CANV_BIZZED1",
+				"type": "char"
+			},
+			{
+				"name": "BELLED_REASON1",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "BELLED_REASON2",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "BIZZ_REASON1",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "BIZZ_REASON2",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "COMMENTS",
+				"type": "varchar"
+			},
+			{
+				"name": "DELETED",
+				"type": "char"
+			},
+			{
+				"name": "CHECKED_FLAG",
+				"type": "char"
+			},
+			{
+				"name": "REP_BRANCH_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "DEAL",
+				"type": "varchar"
+			},
+			{
+				"name": "PAYABLE",
+				"type": "varchar"
+			},
+			{
+				"name": "SECOND_BRANCH",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "CREATED_BY",
+				"type": "varchar"
+			},
+			{
+				"name": "CREATED_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "UPDATED_BY",
+				"type": "varchar"
+			},
+			{
+				"name": "UPDATED_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "LINK_CONTRACT",
+				"type": "varchar"
+			},
+			{
+				"name": "REPNAME",
+				"type": "varchar"
+			},
+			{
+				"name": "REPNAME2",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TB_T_LEAD_LMS"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

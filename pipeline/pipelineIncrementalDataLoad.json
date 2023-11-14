@@ -1,0 +1,318 @@
+{
+	"name": "pipelineIncrementalDataLoad",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup - INSERT Old Timestamp",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT CREATION_TIMESTAMP, UPDATE_TIMESTAMP FROM INCREMENTAL_TIMESTAMP WHERE TABLE_NAME = 'ORDERS'",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DatasetOldTimestamp",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Lookup - INSERT New Timestamp",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT MAX(CREATION_DATE) MAX_CREATION_DATE FROM ORDERS_SOURCE;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DatasetNewTimestamp",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Copy Data - INSERT Incremental Data Insert",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Lookup - INSERT Old Timestamp",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Lookup - INSERT New Timestamp",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "SELECT * FROM ORDERS_SOURCE \nWHERE CREATION_DATE > '@{activity('Lookup - INSERT Old Timestamp').output.firstRow.CREATION_TIMESTAMP}'\nAND CREATION_DATE <= '@{activity('Lookup - INSERT New Timestamp').output.firstRow.MAX_CREATION_DATE}'",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DataSetOrdersSource",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DataSetOrdersTarget",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "SP - Update Last Insert Time",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy Data - INSERT Incremental Data Insert",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[SP_UPDATE_INCREMENTAL_TIMESTAMP]",
+					"storedProcedureParameters": {
+						"INSERT_DATE": {
+							"value": {
+								"value": "@activity('Lookup - INSERT New Timestamp').output.firstRow.MAX_CREATION_DATE",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"UPDATE_DATE": {
+							"value": null,
+							"type": "DateTime"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LinkedServiceHomeDB",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Lookup - UPDATE Old Timestamp",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT CREATION_TIMESTAMP, UPDATE_TIMESTAMP FROM INCREMENTAL_TIMESTAMP WHERE TABLE_NAME = 'ORDERS';",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DatasetNewTimestamp",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Lookup - UPDATE New Timestamp",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT MAX(UPDATE_DATE) MAX_UPDATE_DATE FROM ORDERS_SOURCE;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DatasetOldTimestamp",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Copy Data - UPDATE Incremental Data Load",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Lookup - UPDATE New Timestamp",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Lookup - UPDATE Old Timestamp",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "SELECT * FROM [dbo].[ORDERS_SOURCE] \nWHERE UPDATE_DATE > '@{activity('Lookup - UPDATE Old Timestamp').output.firstRow.UPDATE_TIMESTAMP}' \nAND UPDATE_DATE <= '@{activity('Lookup - UPDATE New Timestamp').output.firstRow.MAX_UPDATE_DATE}'",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE TABLE ORDERS_STAGGING",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DataSetOrdersSource",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DataSetSinkOrdersStagging",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "SP - Update Modified Data",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy Data - UPDATE Incremental Data Load",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[SP_UPDATE_INCREMENTAL_TIMESTAMP]",
+					"storedProcedureParameters": {
+						"INSERT_DATE": {
+							"value": null,
+							"type": "DateTime"
+						},
+						"UPDATE_DATE": {
+							"value": {
+								"value": "@activity('Lookup - UPDATE New Timestamp').output.firstRow.MAX_UPDATE_DATE",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LinkedServiceHomeDB",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-03-25T19:53:03Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

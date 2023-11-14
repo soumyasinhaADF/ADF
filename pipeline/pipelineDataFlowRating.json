@@ -1,0 +1,39 @@
+{
+	"name": "pipelineDataFlowRating",
+	"properties": {
+		"activities": [
+			{
+				"name": "Data flow Emp Rating",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "dataflowEmployeeRating",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"EMPLOYEERATING": {
+								"RATING_YEAR": "2021-22"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-02-16T08:12:19Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

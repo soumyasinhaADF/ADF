@@ -1,0 +1,22 @@
+{
+	"name": "DataSetSourceXML",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedService_ADSL2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "XML to Table - Data Sets"
+		},
+		"annotations": [],
+		"type": "Xml",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "UN Sanction Consolidated List.xml",
+				"fileSystem": "source"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

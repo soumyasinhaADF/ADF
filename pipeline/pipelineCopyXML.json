@@ -1,0 +1,531 @@
+{
+	"name": "pipelineCopyXML",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy Data - Entity",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Wait and Start",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "XmlSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "XmlReadSettings",
+							"validationMode": "none",
+							"namespaces": true
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE TABLE [dbo].[XML_TO_TABLE_ENTITY]",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "['DATAID']"
+								},
+								"sink": {
+									"name": "PROPERTY_1",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['VERSIONNUM']"
+								},
+								"sink": {
+									"name": "PROPERTY_2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['FIRST_NAME']"
+								},
+								"sink": {
+									"name": "PROPERTY_3",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['UN_LIST_TYPE']"
+								},
+								"sink": {
+									"name": "PROPERTY_4",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['REFERENCE_NUMBER']"
+								},
+								"sink": {
+									"name": "PROPERTY_5",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['LISTED_ON']"
+								},
+								"sink": {
+									"name": "PROPERTY_6",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['COMMENTS1']"
+								},
+								"sink": {
+									"name": "PROPERTY_7",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['LIST_TYPE']['VALUE']"
+								},
+								"sink": {
+									"name": "PROPERTY_8",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['LAST_DAY_UPDATED']['VALUE']"
+								},
+								"sink": {
+									"name": "PROPERTY_9",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['ENTITY_ALIAS']['QUALITY']"
+								},
+								"sink": {
+									"name": "PROPERTY_10",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['ENTITY_ALIAS']['ALIAS_NAME']"
+								},
+								"sink": {
+									"name": "PROPERTY_11",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['ENTITY_ADDRESS']['STREET']"
+								},
+								"sink": {
+									"name": "PROPERTY_12",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['ENTITY_ADDRESS']['CITY']"
+								},
+								"sink": {
+									"name": "PROPERTY_13",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['ENTITY_ADDRESS']['COUNTRY']"
+								},
+								"sink": {
+									"name": "PROPERTY_14",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['SORT_KEY']"
+								},
+								"sink": {
+									"name": "PROPERTY_15",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['SORT_KEY_LAST_MOD']"
+								},
+								"sink": {
+									"name": "PROPERTY_16",
+									"type": "String"
+								}
+							}
+						],
+						"collectionReference": "$['CONSOLIDATED_LIST']['ENTITIES']['ENTITY']",
+						"mapComplexValuesToString": true
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DataSetSourceXML",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DataSetXMLtoSQLEntity",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy Data - Individual",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Wait and Start",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "source//UN Sanction Consolidated List.xml"
+					},
+					{
+						"name": "Destination",
+						"value": "dbo.XML_TO_TABLE_INDIVIDUAL"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "XmlSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "XmlReadSettings",
+							"validationMode": "none",
+							"namespaces": true
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE TABLE [dbo].[XML_TO_TABLE_INDIVIDUAL]",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "['DATAID']"
+								},
+								"sink": {
+									"name": "PROPERTY_1",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['VERSIONNUM']"
+								},
+								"sink": {
+									"name": "PROPERTY_2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['FIRST_NAME']"
+								},
+								"sink": {
+									"name": "PROPERTY_3",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['SECOND_NAME']"
+								},
+								"sink": {
+									"name": "PROPERTY_4",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['THIRD_NAME']"
+								},
+								"sink": {
+									"name": "PROPERTY_5",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['UN_LIST_TYPE']"
+								},
+								"sink": {
+									"name": "PROPERTY_6",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['REFERENCE_NUMBER']"
+								},
+								"sink": {
+									"name": "PROPERTY_7",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['LISTED_ON']"
+								},
+								"sink": {
+									"name": "PROPERTY_8",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['COMMENTS1']"
+								},
+								"sink": {
+									"name": "PROPERTY_9",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['DESIGNATION']['VALUE']"
+								},
+								"sink": {
+									"name": "PROPERTY_10",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['NATIONALITY']['VALUE']"
+								},
+								"sink": {
+									"name": "PROPERTY_11",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['LIST_TYPE']['VALUE']"
+								},
+								"sink": {
+									"name": "PROPERTY_12",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['LAST_DAY_UPDATED']['VALUE']"
+								},
+								"sink": {
+									"name": "PROPERTY_13",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['INDIVIDUAL_ALIAS']['QUALITY']"
+								},
+								"sink": {
+									"name": "PROPERTY_14",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['INDIVIDUAL_ALIAS']['ALIAS_NAME']"
+								},
+								"sink": {
+									"name": "PROPERTY_15",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['INDIVIDUAL_ADDRESS']['STREET']"
+								},
+								"sink": {
+									"name": "PROPERTY_16",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['INDIVIDUAL_ADDRESS']['CITY']"
+								},
+								"sink": {
+									"name": "PROPERTY_17",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['INDIVIDUAL_ADDRESS']['STATE_PROVINCE']"
+								},
+								"sink": {
+									"name": "PROPERTY_18",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['INDIVIDUAL_ADDRESS']['COUNTRY']"
+								},
+								"sink": {
+									"name": "PROPERTY_19",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['INDIVIDUAL_DATE_OF_BIRTH']['TYPE_OF_DATE']"
+								},
+								"sink": {
+									"name": "PROPERTY_20",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['INDIVIDUAL_DATE_OF_BIRTH']['DATE']"
+								},
+								"sink": {
+									"name": "PROPERTY_21",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['INDIVIDUAL_PLACE_OF_BIRTH']"
+								},
+								"sink": {
+									"name": "PROPERTY_22",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['INDIVIDUAL_DOCUMENT']['TYPE_OF_DOCUMENT']"
+								},
+								"sink": {
+									"name": "PROPERTY_23",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['INDIVIDUAL_DOCUMENT']['NUMBER']"
+								},
+								"sink": {
+									"name": "PROPERTY_24",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['SORT_KEY']"
+								},
+								"sink": {
+									"name": "PROPERTY_25",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['SORT_KEY_LAST_MOD']"
+								},
+								"sink": {
+									"name": "PROPERTY_26",
+									"type": "String"
+								}
+							}
+						],
+						"collectionReference": "$['CONSOLIDATED_LIST']['INDIVIDUALS']['INDIVIDUAL']",
+						"mapComplexValuesToString": true
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DataSetSourceXML",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DataSetXMLtoSQLIndividual",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Wait and Start",
+				"description": "To Start both the Copy Data activity.",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 2
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-02-18T17:22:13Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

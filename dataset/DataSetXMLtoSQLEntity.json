@@ -1,0 +1,101 @@
+{
+	"name": "DataSetXMLtoSQLEntity",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedServiceHomeDB",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "XML to Table - Data Sets"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "PROPERTY_1",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_2",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_3",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_4",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_5",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_6",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_7",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_8",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_9",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_10",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_11",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_12",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_13",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_14",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_15",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_16",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_17",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_18",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_19",
+				"type": "varchar"
+			},
+			{
+				"name": "PROPERTY_20",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "XML_TO_TABLE_ENTITY"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

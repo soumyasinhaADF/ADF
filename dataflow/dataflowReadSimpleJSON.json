@@ -1,0 +1,167 @@
+{
+	"name": "dataflowReadSimpleJSON",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DataSetSourceSimpleJSON",
+						"type": "DatasetReference"
+					},
+					"name": "SourceSimpleJSON"
+				},
+				{
+					"dataset": {
+						"referenceName": "DataSetSourceArrayJSON",
+						"type": "DatasetReference"
+					},
+					"name": "SourceArrayJSON"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "dataSetSinkSimpleJSON",
+						"type": "DatasetReference"
+					},
+					"name": "sinkJSONtoCSV"
+				},
+				{
+					"dataset": {
+						"referenceName": "DataSetSinkArrayJSON",
+						"type": "DatasetReference"
+					},
+					"name": "sinkArrayJSONtoCSV"
+				}
+			],
+			"transformations": [
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "flatten2"
+				},
+				{
+					"name": "flatten3"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Employees as (userId as string, jobTitleName as string, firstName as string, lastName as string, preferredFullName as string, employeeCode as string, region as string, phoneNumber as string, emailAddress as string)[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments',",
+				"     partitionBy('hash', 1)) ~> SourceSimpleJSON",
+				"source(output(",
+				"          Employees as (Employee as (EmployeeID as string, Name as string, Department as string, Designation as string, Project as string, DOJ as string, Education as (Standard as string, Board as string, Institution as string)[])[])",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> SourceArrayJSON",
+				"SourceSimpleJSON aggregate(Employees = collect(@(Employees = Employees) ),",
+				"     partitionBy('hash', 1)) ~> aggregate1",
+				"aggregate1 foldDown(unroll(Employees.Employees),",
+				"     mapColumn(",
+				"          userId = Employees.Employees.userId,",
+				"          jobTitleName = Employees.Employees.jobTitleName,",
+				"          firstName = Employees.Employees.firstName,",
+				"          lastName = Employees.Employees.lastName,",
+				"          preferredFullName = Employees.Employees.preferredFullName,",
+				"          employeeCode = Employees.Employees.employeeCode,",
+				"          region = Employees.Employees.region,",
+				"          phoneNumber = Employees.Employees.phoneNumber,",
+				"          emailAddress = Employees.Employees.emailAddress",
+				"     ),",
+				"     partitionBy('hash', 1),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"SourceArrayJSON foldDown(unroll(Employees.Employee),",
+				"     mapColumn(",
+				"          EmployeeID = Employees.Employee.EmployeeID,",
+				"          Name = Employees.Employee.Name,",
+				"          Department = Employees.Employee.Department,",
+				"          Designation = Employees.Employee.Designation,",
+				"          Project = Employees.Employee.Project,",
+				"          DOJ = Employees.Employee.DOJ,",
+				"          Education = Employees.Employee.Education",
+				"     ),",
+				"     partitionBy('hash', 1),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten2",
+				"flatten2 foldDown(unroll(Education),",
+				"     mapColumn(",
+				"          EmployeeID,",
+				"          Name,",
+				"          Department,",
+				"          Designation,",
+				"          Project,",
+				"          DOJ,",
+				"          Standard = Education.Standard,",
+				"          Board = Education.Board,",
+				"          Institution = Education.Institution",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten3",
+				"flatten1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Column_1 as string,",
+				"          Column_2 as string,",
+				"          Column_3 as string,",
+				"          Column_4 as string,",
+				"          Column_5 as string,",
+				"          Column_6 as string,",
+				"          Column_7 as string,",
+				"          Column_8 as string,",
+				"          Column_9 as string,",
+				"          Column_10 as string",
+				"     ),",
+				"     partitionFileNames:['SimpleJSON.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     mapColumn(",
+				"          userId,",
+				"          jobTitleName,",
+				"          firstName,",
+				"          lastName,",
+				"          preferredFullName,",
+				"          employeeCode,",
+				"          region,",
+				"          phoneNumber,",
+				"          emailAddress",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> sinkJSONtoCSV",
+				"flatten3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Column_1 as string,",
+				"          Column_2 as string,",
+				"          Column_3 as string,",
+				"          Column_4 as string,",
+				"          Column_5 as string,",
+				"          Column_6 as string,",
+				"          Column_7 as string,",
+				"          Column_8 as string,",
+				"          Column_9 as string,",
+				"          Column_10 as string",
+				"     ),",
+				"     partitionFileNames:['ArrayJSON.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sinkArrayJSONtoCSV"
+			]
+		}
+	}
+}

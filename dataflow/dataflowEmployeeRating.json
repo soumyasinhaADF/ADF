@@ -1,0 +1,102 @@
+{
+	"name": "dataflowEmployeeRating",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DataSetEmployee",
+						"type": "DatasetReference"
+					},
+					"name": "EMPLOYEE"
+				},
+				{
+					"dataset": {
+						"referenceName": "datasetemployeerating",
+						"type": "DatasetReference"
+					},
+					"name": "EMPLOYEERATING"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "datasetcsvrating",
+						"type": "DatasetReference"
+					},
+					"name": "SinkCSV"
+				}
+			],
+			"transformations": [
+				{
+					"name": "JOINEMPID"
+				},
+				{
+					"name": "SplitRating"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMPLOYEE_ID as integer,",
+				"          EMPLOYEE_NAME as string,",
+				"          DOJ as timestamp,",
+				"          DEPARTMENT as string,",
+				"          SUPERVISOR_ID as integer,",
+				"          IS_ACTIVE as string,",
+				"          CREATION_DATE as timestamp,",
+				"          MODIFICATION_DATE as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> EMPLOYEE",
+				"source(output(",
+				"          RATING_ID as integer,",
+				"          EMPLOYEE_ID as integer,",
+				"          RATING_YEAR as string,",
+				"          RATING as integer,",
+				"          IS_ACTIVE as string,",
+				"          CREATION_DATE as timestamp,",
+				"          MODIFICATION_DATE as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT * FROM EMPLOYEE_RATING WHERE RATING_YEAR = \\'2021-22\\'',",
+				"     format: 'query') ~> EMPLOYEERATING",
+				"EMPLOYEE, EMPLOYEERATING join(EMPLOYEE@EMPLOYEE_ID == EMPLOYEERATING@EMPLOYEE_ID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> JOINEMPID",
+				"JOINEMPID split(greaterOrEqual(RATING, 3),",
+				"     lesser(RATING, 3),",
+				"     disjoint: false) ~> SplitRating@(Rating3, RatingBelow3, RatingUnknown)",
+				"SplitRating@Rating3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     filePattern:(concat('Employee Rating ', toString(currentUTC() + hours(5) + minutes(30)), '.csv')\r",
+				"\r",
+				"),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          EMPLOYEE_ID = SplitRating@Rating3@EMPLOYEE_ID,",
+				"          EMPLOYEE_NAME,",
+				"          DOJ,",
+				"          DEPARTMENT,",
+				"          IS_ACTIVE = SplitRating@Rating3@IS_ACTIVE,",
+				"          RATING_ID,",
+				"          RATING_YEAR,",
+				"          RATING,",
+				"          RATING_CREATION_DATE = SplitRating@Rating3@CREATION_DATE,",
+				"          RATING_MODIFICATION_DATE = SplitRating@Rating3@MODIFICATION_DATE",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> SinkCSV"
+			]
+		}
+	}
+}

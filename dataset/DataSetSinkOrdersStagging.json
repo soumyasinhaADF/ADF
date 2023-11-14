@@ -1,0 +1,60 @@
+{
+	"name": "DataSetSinkOrdersStagging",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedServiceHomeDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ORDER_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PRODUCT",
+				"type": "varchar"
+			},
+			{
+				"name": "QUANTITY",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "UNIT_PRICE",
+				"type": "decimal",
+				"precision": 11,
+				"scale": 2
+			},
+			{
+				"name": "ORDER_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "IS_DELETED",
+				"type": "varchar"
+			},
+			{
+				"name": "CREATION_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "UPDATE_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ORDERS_STAGGING"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

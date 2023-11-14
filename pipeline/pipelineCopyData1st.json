@@ -1,0 +1,364 @@
+{
+	"name": "pipelineCopyData1st",
+	"properties": {
+		"description": "First Copy Data Pipeline",
+		"activities": [
+			{
+				"name": "Copy SQL Data To CSV",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".csv"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "EMPLOYEE_ID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "EMPLOYEE_ID",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EMPLOYEE_NAME",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "EMPLOYEE_NAME",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DOJ",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								},
+								"sink": {
+									"name": "DOJ",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DEPARTMENT",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "DEPARTMENT",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SUPERVISOR_ID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "SUPERVISOR_ID",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "IS_ACTIVE",
+									"type": "String",
+									"physicalType": "varchar"
+								},
+								"sink": {
+									"name": "IS_ACTIVE",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CREATION_DATE",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								},
+								"sink": {
+									"name": "CREATION_DATE",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MODIFICATION_DATE",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								},
+								"sink": {
+									"name": "MODIFICATION_DATE",
+									"type": "String",
+									"physicalType": "String"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DataSetEmployee",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DataSetCSV",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy CSV Date To Table",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copy SQL Data To CSV",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": false,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "upsert",
+						"upsertSettings": {
+							"useTempDB": true,
+							"keys": [
+								"EMPLOYEE_ID"
+							]
+						},
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "EMPLOYEE_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EMPLOYEE_ID",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "EMPLOYEE_NAME",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EMPLOYEE_NAME",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DOJ",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DOJ",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "DEPARTMENT",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DEPARTMENT",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SUPERVISOR_ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SUPERVISOR_ID",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "IS_ACTIVE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "IS_ACTIVE",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CREATION_DATE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CREATION_DATE",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "MODIFICATION_DATE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MODIFICATION_DATE",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DataSetCSV",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DataSetEmployeeBackup",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Lookup Load SP Data",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy CSV Date To Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[dbo].[SP_FETCH_EMPLOYEE]",
+						"storedProcedureParameters": {
+							"EMP_NAME": {
+								"type": "String",
+								"value": ""
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DataSetFromSP",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-03-03T21:35:26Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

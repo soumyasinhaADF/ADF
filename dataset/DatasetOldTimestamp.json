@@ -1,0 +1,33 @@
+{
+	"name": "DatasetOldTimestamp",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedServiceHomeDB",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Incremental Data Load - Data Sets"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "TABLE_NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "CREATION_TIMESTAMP",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "UPDATE_TIMESTAMP",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

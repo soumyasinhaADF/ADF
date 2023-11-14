@@ -1,0 +1,34 @@
+{
+	"name": "pipelineDataFlowReadJSON",
+	"properties": {
+		"activities": [
+			{
+				"name": "Data Flow - Read JSON",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "dataflowReadSimpleJSON",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-02-17T20:44:06Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
